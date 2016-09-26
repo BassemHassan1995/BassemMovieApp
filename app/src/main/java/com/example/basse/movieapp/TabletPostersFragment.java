@@ -74,8 +74,6 @@ public class TabletPostersFragment extends Fragment {
 
             }
         });
-
-//        update("popular");
         return view;
     }
 
