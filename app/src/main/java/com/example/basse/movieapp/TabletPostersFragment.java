@@ -116,7 +116,7 @@ public class TabletPostersFragment extends Fragment {
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
-    
+
     public class GetMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>> {
         public final String API_KEY = getString(R.string.api_key);
         public final String BASE_URL = getString(R.string.baseURL);

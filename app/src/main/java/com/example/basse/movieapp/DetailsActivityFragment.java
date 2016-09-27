@@ -183,7 +183,7 @@ public class DetailsActivityFragment extends Fragment {
         try {
             movieDao = MainActivity.helper.getMovieDao();
             Movie myMovie = movieDao.queryForSameId(movie);
-            if (myMovie.isFavourite()) {
+            if (myMovie != null && myMovie.isFavourite() ) {
                 menuItem.setIcon(R.drawable.ic_star_white_48dp);
             } else
                 menuItem.setIcon(R.drawable.ic_star_border_white_48dp);
