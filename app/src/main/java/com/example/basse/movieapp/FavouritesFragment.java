@@ -1,5 +1,6 @@
 package com.example.basse.movieapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -41,17 +42,14 @@ public class FavouritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         gridView = (GridView) view.findViewById(R.id.gridview_movies);
-        posters.add(new ImageView(getContext()));
+        gridView.setEmptyView(view.findViewById(R.id.empty_view));
         imageAdapter = new ImageAdapter(getContext(), posters);
         gridView.setAdapter(imageAdapter);
 
-        favouriteMovies = getDbMovies();
-        if (favouriteMovies != null) {
-            updatePosters(favouriteMovies);
-        }
+        getUpdatedMovies ();
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -66,13 +64,22 @@ public class FavouritesFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-
+    private void getUpdatedMovies() {
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Getting Favorite Movies");
+        dialog.show();
         favouriteMovies = getDbMovies();
         if (favouriteMovies != null) {
             updatePosters(favouriteMovies);
         }
+        if (dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        getUpdatedMovies();
         super.onResume();
     }
 

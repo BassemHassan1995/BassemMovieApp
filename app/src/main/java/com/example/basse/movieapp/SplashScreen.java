@@ -3,11 +3,14 @@ package com.example.basse.movieapp;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 public class SplashScreen extends AppCompatActivity {
@@ -17,6 +20,8 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_splash_screen);
         new Handler().postDelayed(new Runnable() {
@@ -44,9 +49,43 @@ public class SplashScreen extends AppCompatActivity {
         // first, check connectivity
         if (DetectConnection
                 .checkInternetConnection(SplashScreen.this)) {
-            Intent i = new Intent(SplashScreen.this, MainActivity.class);
-            startActivity(i);
-            finish();
+//  Declare a new thread to do a preference check
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //  Initialize SharedPreferences
+                    SharedPreferences getPrefs = PreferenceManager
+                            .getDefaultSharedPreferences(getBaseContext());
+
+                    //  Create a new boolean and preference and set it to true
+                    boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+                    //  If the activity has never started before...
+                    if (isFirstStart) {
+
+                        //  Launch app intro
+                        Intent i = new Intent(SplashScreen.this, IntroActivity.class);
+                        startActivity(i);
+
+                        //  Make a new preferences editor
+                        SharedPreferences.Editor e = getPrefs.edit();
+
+                        //  Edit preference to make it false because we don't want this to run again
+                        e.putBoolean("firstStart", false);
+
+                        //  Apply changes
+                        e.apply();
+                    } else {
+                        //  Launch app intro
+                        Intent i = new Intent(SplashScreen.this, IntroActivity.class);
+                        startActivity(i);
+                    }
+                    finish();
+                }
+            });
+            // Start the thread
+            t.start();
+
             // do things if it there's network connection
         } else {
             // as it seems there's no Internet connection
@@ -70,7 +109,6 @@ public class SplashScreen extends AppCompatActivity {
                     })
                     .show();
         }
-
     }
 
 

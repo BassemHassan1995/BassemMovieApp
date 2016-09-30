@@ -13,7 +13,6 @@
         android:src="@drawable/movie"
         android:scaleType="fitCenter"
         android:layout_gravity="top"
-
         android:layout_weight="1"/>
 
     <TextView

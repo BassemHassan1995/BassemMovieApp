@@ -32,8 +32,8 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.koushikdutta.ion:ion:2.1.9'
     compile 'com.j256.ormlite:ormlite-android:5.0'
-    compile 'com.github.ivbaranov:materialfavoritebutton:0.1.2'
     compile "com.tojc.ormlite.android:ormlite-content-provider-library:1.0.4@jar"
     compile "com.tojc.ormlite.android:ormlite-content-provider-compiler:1.0.4@jar"
+    compile 'com.github.paolorotolo:appintro:4.1.0'
     testCompile 'junit:junit:4.12'
 }
