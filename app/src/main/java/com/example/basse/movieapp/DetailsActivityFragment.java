@@ -82,7 +82,11 @@ public class DetailsActivityFragment extends Fragment {
             title_textView.setText(title);
             releaseDate_textView.setText(releaseDate);
             overview_textView.setText(overview);
-            Picasso.with(getContext()).load(backdrop).into(backdropPoster);
+            if (!backdrop.equals(""))
+            {
+                Picasso.with(getContext()).load(backdrop).into(backdropPoster);
+            }
+
             playTrailer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

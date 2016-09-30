@@ -1,7 +1,6 @@
 package com.example.basse.movieapp;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,17 +17,18 @@ public class IntroActivity extends AppIntro {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // Instead of fragments, you can also use our default slide
         // Just set a title, description, background and image. AppIntro will do the rest.
-        int primary = getResources().getColor(R.color.colorPrimary);
+        int background = getResources().getColor(R.color.red);
+        int white = getResources().getColor(R.color.white);
 
-        addSlide(AppIntroFragment.newInstance("Popular Movies", "The Top 20 Popular Movies Currently", R.drawable.screenshot_popular, primary));
-        addSlide(AppIntroFragment.newInstance("Top Rated Movies", "The Top 20 Top Rated Movies Currently", R.drawable.screenshot_top_rated, primary));
-        addSlide(AppIntroFragment.newInstance("Favorite Movies", "Your own favorite movies", R.drawable.screenshot_favorites, primary));
-        addSlide(AppIntroFragment.newInstance("Add To Favorites", "Add Any movie to Your Favorite Movies", R.drawable.screenshot_add_to_favorites, primary));
+        addSlide(AppIntroFragment.newInstance("Popular Movies", "The Top 20 Popular Movies Currently", R.drawable.screenshot_popular, background));
+        addSlide(AppIntroFragment.newInstance("Top Rated Movies", "The Top 20 Top Rated Movies Currently", R.drawable.screenshot_top_rated, background));
+        addSlide(AppIntroFragment.newInstance("Favorite Movies", "Your own favorite movies", R.drawable.screenshot_favorites, background));
+        addSlide(AppIntroFragment.newInstance("Add To Favorites", "Add Any movie to Your Favorite Movies", R.drawable.screenshot_add_to_favorites, background));
 
         // OPTIONAL METHODS
         // Override bar/separator color.
-        setBarColor(Color.parseColor("#3F51B5"));
-        setSeparatorColor(Color.parseColor("#2196F3"));
+        setBarColor(background);
+        setSeparatorColor(white);
 
         // Hide Skip/Done button.
         showSkipButton(true);

@@ -27,6 +27,7 @@
 
             <ImageView
                 android:id="@+id/poster_image_view"
+                android:src="@drawable/img_not_found_wide"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop" />

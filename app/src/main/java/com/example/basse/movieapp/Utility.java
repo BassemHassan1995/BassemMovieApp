@@ -42,7 +42,14 @@ public class Utility {
         int height = displayMetrics.heightPixels /2;
 
         int width = displayMetrics.widthPixels /2;
-        Picasso.with(context).load(movie.getPoster_path()).centerCrop().resize(width,height).into(poster);
+        String posterPath = movie.getPoster_path();
+        if (posterPath.equals(""))
+        {
+            poster.setImageResource(R.drawable.no_poster_available);
+        }
+        else {
+            Picasso.with(context).load(posterPath).centerCrop().resize(width,height).into(poster);
+        }
         return poster;
     }
 
