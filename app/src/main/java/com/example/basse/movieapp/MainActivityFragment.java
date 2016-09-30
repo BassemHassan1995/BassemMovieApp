@@ -40,9 +40,8 @@ public class MainActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         gridView = (GridView) view.findViewById(R.id.gridview_movies);
-
         posters.add(new ImageView(getContext()));
-        imageAdapter = new ImageAdapter(getContext(), posters);
+        imageAdapter = new ImageAdapter(getContext(), posters,false);
         gridView.setAdapter(imageAdapter);
 
         if (getArguments() != null && movies.isEmpty()) {

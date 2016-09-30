@@ -14,10 +14,12 @@ import java.util.List;
 public class ImageAdapter extends BaseAdapter {
     Context context ;
     List<ImageView> posters;
+    boolean favorite ;
 
-    public ImageAdapter(Context context, List<ImageView> posters) {
+    public ImageAdapter(Context context, List<ImageView> posters, boolean favorite) {
         this.context = context;
         this.posters = posters;
+        this.favorite = favorite;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class ImageAdapter extends BaseAdapter {
         else
             poster = (ImageView)convertView;
 
-        if (posters.size()>1)
+        if (posters.size()>1 || favorite)
         {
             poster = posters.get(position);
         }

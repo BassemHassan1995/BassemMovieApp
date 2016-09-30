@@ -56,7 +56,7 @@ public class TabletPostersFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tablet_posters, container, false);
         gridView = (GridView) view.findViewById(R.id.gridview_movies);
         postersList.add(new ImageView(getContext()));
-        imageAdapter = new ImageAdapter(getContext(), postersList);
+        imageAdapter = new ImageAdapter(getContext(), postersList,favoriteFragment);
         gridView.setAdapter(imageAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

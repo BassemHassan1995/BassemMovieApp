@@ -18,14 +18,12 @@ public class IntroActivity extends AppIntro {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // Instead of fragments, you can also use our default slide
         // Just set a title, description, background and image. AppIntro will do the rest.
-        int white = getResources().getColor(R.color.white);
-        int primaryDark = getResources().getColor(R.color.colorPrimaryDark);
         int primary = getResources().getColor(R.color.colorPrimary);
 
-        addSlide(AppIntroFragment.newInstance("Popular", "Top 20 popular movies", R.drawable.screenshot_popular, primary));
-        addSlide(AppIntroFragment.newInstance("Top Rated", "Top 20 top rated movies", R.drawable.screenshot_top_rated, primary));
-        addSlide(AppIntroFragment.newInstance("Favorites", "Your favorite movies", R.drawable.screenshot_favorites, primary));
-        addSlide(AppIntroFragment.newInstance("Add To Favorites", "Add any movie to you favorite movies", R.drawable.screenshot_add_to_favorites, primary));
+        addSlide(AppIntroFragment.newInstance("Popular Movies", "The Top 20 Popular Movies Currently", R.drawable.screenshot_popular, primary));
+        addSlide(AppIntroFragment.newInstance("Top Rated Movies", "The Top 20 Top Rated Movies Currently", R.drawable.screenshot_top_rated, primary));
+        addSlide(AppIntroFragment.newInstance("Favorite Movies", "Your own favorite movies", R.drawable.screenshot_favorites, primary));
+        addSlide(AppIntroFragment.newInstance("Add To Favorites", "Add Any movie to Your Favorite Movies", R.drawable.screenshot_add_to_favorites, primary));
 
         // OPTIONAL METHODS
         // Override bar/separator color.

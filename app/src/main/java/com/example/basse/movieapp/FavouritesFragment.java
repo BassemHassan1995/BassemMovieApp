@@ -46,7 +46,7 @@ public class FavouritesFragment extends Fragment {
 
         gridView = (GridView) view.findViewById(R.id.gridview_movies);
         gridView.setEmptyView(view.findViewById(R.id.empty_view));
-        imageAdapter = new ImageAdapter(getContext(), posters);
+        imageAdapter = new ImageAdapter(getContext(), posters,true);
         gridView.setAdapter(imageAdapter);
 
         getUpdatedMovies ();
