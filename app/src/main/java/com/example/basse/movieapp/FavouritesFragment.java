@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,10 +47,10 @@ public class FavouritesFragment extends Fragment {
 
         gridView = (GridView) view.findViewById(R.id.gridview_movies);
         gridView.setEmptyView(view.findViewById(R.id.empty_view));
-        imageAdapter = new ImageAdapter(getContext(), posters,true);
+        imageAdapter = new ImageAdapter(getContext(), posters, true);
         gridView.setAdapter(imageAdapter);
 
-        getUpdatedMovies ();
+        getUpdatedMovies();
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,10 +97,29 @@ public class FavouritesFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_clear_all) {
-            deleteDbMovies();
-            imageAdapter.notifyDataSetChanged();
 
+        if (id == R.id.action_clear_all) {
+            Snackbar.make(getView(), "All Favorites Cleared", Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
+                @Override
+                public void onDismissed(Snackbar snackbar, int choice) {
+                    if (choice != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                        deleteDbMovies();
+                        posters.clear();
+                        imageAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onShown(Snackbar snackbar) {
+                    super.onShown(snackbar);
+                    getView().setVisibility(View.GONE);
+                }
+            }).setAction("Undo", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getView().setVisibility(View.VISIBLE);
+                }
+            }).show();
             return true;
         }
         return super.onOptionsItemSelected(item);

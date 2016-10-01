@@ -1,6 +1,5 @@
 package com.example.basse.movieapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -78,8 +77,7 @@ public class SplashScreen extends AppCompatActivity {
                         e.apply();
                     } else {
                         //  Launch Main Activity
-                        Intent i = new Intent(SplashScreen.this, Main
-                                Activity.class);
+                        Intent i = new Intent(SplashScreen.this, MainActivity.class);
                         startActivity(i);
                     }
                     finish();
