@@ -76,21 +76,29 @@ public class DetailsActivityFragment extends Fragment {
             String releaseDate = movie.getRelease_date();
             String overview = movie.getOverview();
             String backdrop = movie.getBackdrop_path();
+            Toast.makeText(getContext(),backdrop,Toast.LENGTH_SHORT).show();
             isFavourite = movie.isFavourite();
             final float rating = Float.parseFloat(movie.getVote_average()) / 2;
 
             title_textView.setText(title);
             releaseDate_textView.setText(releaseDate);
             overview_textView.setText(overview);
-            if (!backdrop.equals(""))
-            {
+            if (!backdrop.contains("null")) {
                 Picasso.with(getContext()).load(backdrop).into(backdropPoster);
             }
 
             playTrailer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(movie.getTrailerPath())));
+                    String trailerPath = movie.getTrailerPath();
+                    if (trailerPath.isEmpty())
+                    {
+                        Toast.makeText(getContext(), R.string.no_trailers, Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(trailerPath)));
+                    }
 
                 }
             });
@@ -128,7 +136,7 @@ public class DetailsActivityFragment extends Fragment {
 
     public void changeData(final Movie movie) {
 
-        TrailerAndReviewsTask trailerAndReviewsTask = new TrailerAndReviewsTask();
+        final TrailerAndReviewsTask trailerAndReviewsTask = new TrailerAndReviewsTask();
         trailerAndReviewsTask.execute(movie);
 
         String title = movie.getTitle();
@@ -141,13 +149,20 @@ public class DetailsActivityFragment extends Fragment {
         title_textView.setText(title);
         releaseDate_textView.setText(releaseDate);
         overview_textView.setText(overview);
-        Picasso.with(getContext()).load(backdrop).into(backdropPoster);
+        if (!backdrop.isEmpty())
+            Picasso.with(getContext()).load(backdrop).into(backdropPoster);
         playTrailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Uri uri = Uri.parse(movie.getTrailerPath());
-                startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                String trailerPath = movie.getTrailerPath();
+                if (!trailerPath.isEmpty())
+                {
+                    Uri uri = Uri.parse(trailerPath);
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                }
+                else {
+                    Toast.makeText(getContext(), R.string.no_trailers,Toast.LENGTH_SHORT);
+                }
             }
         });
         ratingBar.setRating(rating);
@@ -187,7 +202,7 @@ public class DetailsActivityFragment extends Fragment {
         try {
             movieDao = MainActivity.helper.getMovieDao();
             Movie myMovie = movieDao.queryForSameId(movie);
-            if (myMovie != null && myMovie.isFavourite() ) {
+            if (myMovie != null && myMovie.isFavourite()) {
                 menuItem.setIcon(R.drawable.ic_star_white_48dp);
             } else
                 menuItem.setIcon(R.drawable.ic_star_border_white_48dp);

@@ -35,6 +35,7 @@ public class Utility {
 
     private static MovieDbHelper helper = MainActivity.helper;
 
+
     public static ImageView getPoster(Context context, Movie movie) {
         ImageView poster = new ImageView(context);
 
@@ -62,13 +63,15 @@ public class Utility {
     public static String getJsonString(String my_url, String API_KEY) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
+        final String LANGUAGE_EN = "en-US";
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
         String jsonString = null;
 
+
         try {
-            Uri moviesBuiltUri = Uri.parse(my_url).buildUpon().appendQueryParameter("api_key", API_KEY).build();
+            Uri moviesBuiltUri = Uri.parse(my_url).buildUpon().appendQueryParameter("api_key", API_KEY).appendQueryParameter("language", LANGUAGE_EN ).build();
 
             URL url = null;
             try {

@@ -10,13 +10,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 //import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -30,25 +33,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         helper = new MovieDbHelper(this);
 
-        if (isTablet(this)){
-            startActivity(new Intent(MainActivity.this,TabletActivity.class));
+        if (isTablet(this)) {
+            startActivity(new Intent(MainActivity.this, TabletActivity.class));
             this.finish();
-        }
-        else {
+        } else {
             setContentView(R.layout.activity_main);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
             // Create the adapter that will return a fragment for each of the three
             // primary sections of the activity.
-            /*
-      The {@link android.support.v4.view.PagerAdapter} that will provide
-      fragments for each of the sections. We use a
-      {@link FragmentPagerAdapter} derivative, which will keep every
-      loaded fragment in memory. If this becomes too memory intensive, it
-      may be best to switch to a
-      {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
             MainPagerAdapter mSectionsPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
 
             // Set up the ViewPager with the sections adapter.
@@ -63,7 +57,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return false;
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setQueryHint(getString(R.string.search));
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Toast.makeText(MainActivity.this, "Search is not currently working", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override
@@ -73,12 +83,8 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        return id == R.id.action_search || super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
     }
 
     public static boolean isTablet(Context context) {
@@ -100,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 5;
         }
 
         @Override
@@ -111,7 +117,11 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return "Top Rated";
                 case 2:
-                    return "Favourites";
+                    return "Now Playing";
+                case 3:
+                    return "Upcoming";
+                case 4:
+                    return "Favorites";
             }
             return null;
         }
@@ -122,10 +132,17 @@ public class MainActivity extends AppCompatActivity {
 
             if (position == 0)
                 sort_type = "popular";
+
             else if (position == 1)
                 sort_type = "top_rated";
 
-            else if (position == 2)  //Favourites Tab
+            else if (position == 2)
+                sort_type = "now_playing";
+
+            else if (position == 3)
+                sort_type = "upcoming";
+
+            else if (position == 4)  //Favourites Tab
                 return new FavouritesFragment();
 
             MainActivityFragment myFragment = new MainActivityFragment();
@@ -134,6 +151,5 @@ public class MainActivity extends AppCompatActivity {
             myFragment.setArguments(args);
             return myFragment;
         }
-
     }
 }

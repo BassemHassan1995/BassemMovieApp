@@ -137,7 +137,6 @@ public class FavouritesFragment extends Fragment {
         try {
             Dao<Movie, Integer> movieDao = helper.getMovieDao();
             return movieDao.queryForAll();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

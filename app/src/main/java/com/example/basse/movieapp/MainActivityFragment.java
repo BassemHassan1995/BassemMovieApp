@@ -45,7 +45,6 @@ public class MainActivityFragment extends Fragment {
         gridView.setAdapter(imageAdapter);
 
         if (getArguments() != null && movies.isEmpty()) {
-
             GetMoviesTask getMoviesTask = new GetMoviesTask();
             sortType = this.getArguments().getString("sort_type", "popular");
             getMoviesTask.execute(sortType);
