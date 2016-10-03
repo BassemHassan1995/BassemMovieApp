@@ -153,6 +153,5 @@ public class FavouritesFragment extends Fragment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 }
