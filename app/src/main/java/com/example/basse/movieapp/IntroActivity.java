@@ -20,10 +20,12 @@ public class IntroActivity extends AppIntro {
         int background = getResources().getColor(R.color.red);
         int white = getResources().getColor(R.color.white);
 
-        addSlide(AppIntroFragment.newInstance("Popular Movies", "The Top 20 Popular Movies Currently", R.drawable.screenshot_popular, background));
-        addSlide(AppIntroFragment.newInstance("Top Rated Movies", "The Top 20 Top Rated Movies Currently", R.drawable.screenshot_top_rated, background));
-        addSlide(AppIntroFragment.newInstance("Favorite Movies", "Your own favorite movies", R.drawable.screenshot_favorites, background));
+        addSlide(AppIntroFragment.newInstance("Popular Movies", "The Most Popular Movies", R.drawable.screenshot_popular, background));
+        addSlide(AppIntroFragment.newInstance("Top Rated Movies", "The Top Rated Movies", R.drawable.screenshot_top_rated, background));
+        addSlide(AppIntroFragment.newInstance("Now Playing Movies", "The Now-Playing in Theatres", R.drawable.screenshot_now_playing, background));
+        addSlide(AppIntroFragment.newInstance("Coming Soon Movies", "The Movies That Will be In Theatres Soon", R.drawable.screenshot_upcoming, background));
         addSlide(AppIntroFragment.newInstance("Add To Favorites", "Add Any movie to Your Favorite Movies", R.drawable.screenshot_add_to_favorites, background));
+        addSlide(AppIntroFragment.newInstance("Search Movies", "Search for Any Movie Name", R.drawable.screenshot_search, background));
 
         // OPTIONAL METHODS
         // Override bar/separator color.

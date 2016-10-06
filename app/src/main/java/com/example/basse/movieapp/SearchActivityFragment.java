@@ -14,14 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
-import static com.example.basse.movieapp.R.string.search;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -32,6 +29,8 @@ public class SearchActivityFragment extends Fragment {
     public ArrayList<String> posters_paths = new ArrayList<>();
     public GridView gridView;
     public ArrayList<Movie> movies = new ArrayList<>();
+    public TextView textView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +54,8 @@ public class SearchActivityFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        textView = (TextView) view.findViewById(R.id.empty_text);
+        textView.setText("Search for a movie");
         return view;
     }
 
@@ -65,10 +66,10 @@ public class SearchActivityFragment extends Fragment {
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setQueryHint(getString(R.string.search));
         searchView.setIconified(false);
-        searchView.setSubmitButtonEnabled(true);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String search) {
+                textView.setText("No results found");
                 GetResultsTask getResultsTask = new GetResultsTask();
                 getResultsTask.execute(search);
                 searchView.clearFocus();
@@ -120,6 +121,7 @@ public class SearchActivityFragment extends Fragment {
 
             moviesJsonString = Utility.getJsonString(BASE_URL, API_KEY, LANGUAGE, SEARCH);
 
+            posters_paths.clear();
             movies = Utility.getMoviesFromJson(moviesJsonString);
             for (int index = 0; index < movies.size(); index++) {
                 Movie movie = movies.get(index);
