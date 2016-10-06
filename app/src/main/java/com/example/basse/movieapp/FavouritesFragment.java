@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
 
@@ -28,7 +29,8 @@ import java.util.List;
 public class FavouritesFragment extends Fragment {
 
     public ImageAdapter imageAdapter;
-    public ArrayList<ImageView> posters = new ArrayList<ImageView>();
+    public ArrayList<ImageView> posters = new ArrayList<>();
+    public ArrayList<String> posters_paths = new ArrayList<>();
     public GridView gridView;
     public List<Movie> favouriteMovies = new ArrayList<>();
     MovieDbHelper helper = MainActivity.helper;
@@ -47,7 +49,7 @@ public class FavouritesFragment extends Fragment {
 
         gridView = (GridView) view.findViewById(R.id.gridview_movies);
         gridView.setEmptyView(view.findViewById(R.id.empty_view));
-        imageAdapter = new ImageAdapter(getContext(), posters, true);
+        imageAdapter = new ImageAdapter(getContext(), posters_paths, true);
         gridView.setAdapter(imageAdapter);
 
         getUpdatedMovies();
@@ -97,38 +99,42 @@ public class FavouritesFragment extends Fragment {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-
         if (id == R.id.action_clear_all) {
-            Snackbar.make(getView(), "All Favorites Cleared", Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
-                @Override
-                public void onDismissed(Snackbar snackbar, int choice) {
-                    if (choice != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                        deleteDbMovies();
-                        posters.clear();
-                        imageAdapter.notifyDataSetChanged();
+            if (posters_paths.isEmpty()) {
+                Toast.makeText(getContext(), "No Favorites to Clear", Toast.LENGTH_LONG).show();
+            } else {
+                Snackbar.make(getView(), "All Favorites Cleared", Snackbar.LENGTH_LONG).setCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int choice) {
+                        if (choice != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                            deleteDbMovies();
+                            posters_paths.clear();
+                            imageAdapter.notifyDataSetChanged();
+                        }
                     }
-                }
 
-                @Override
-                public void onShown(Snackbar snackbar) {
-                    super.onShown(snackbar);
-                    getView().setVisibility(View.GONE);
-                }
-            }).setAction("Undo", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    getView().setVisibility(View.VISIBLE);
-                }
-            }).show();
+                    @Override
+                    public void onShown(Snackbar snackbar) {
+                        super.onShown(snackbar);
+                        getView().setVisibility(View.GONE);
+                    }
+                }).setAction("Undo", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getView().setVisibility(View.VISIBLE);
+                    }
+                }).show();
+
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void updatePosters(List<Movie> favouriteMovies) {
-        posters.clear();
+        posters_paths.clear();
         for (Movie movie : favouriteMovies) {
-            posters.add(Utility.getPoster(getContext(), movie));
+            posters_paths.add(movie.getPoster_path());
         }
         imageAdapter.notifyDataSetChanged();
     }

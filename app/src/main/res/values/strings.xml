@@ -7,6 +7,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="action_favourite">Add to Favourites</string>
     <string name="baseURL">https://api.themoviedb.org/3/movie/</string>
+    <string name="search_base_URL">https://api.themoviedb.org/3/search/movie</string>
     <string name="api_key">7895f44a75dbe63d3333d9f6a76ecc95</string>
     <string name="reviews">reviews</string>
     <string name="videos">videos</string>
@@ -24,4 +25,6 @@
     <string name="no_trailers">This movie has no trailers yet</string>
     <string name="english">en-US</string>
     <string name="language">language</string>
+    <string name="show_more">Show More</string>
+    <string name="title_activity_search">Search</string>
 </resources>

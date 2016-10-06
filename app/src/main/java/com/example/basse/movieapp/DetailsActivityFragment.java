@@ -76,7 +76,6 @@ public class DetailsActivityFragment extends Fragment {
             String releaseDate = movie.getRelease_date();
             String overview = movie.getOverview();
             String backdrop = movie.getBackdrop_path();
-            Toast.makeText(getContext(),backdrop,Toast.LENGTH_SHORT).show();
             isFavourite = movie.isFavourite();
             final float rating = Float.parseFloat(movie.getVote_average()) / 2;
 
@@ -266,9 +265,11 @@ public class DetailsActivityFragment extends Fragment {
 
             String REVIEWS_URL = BASE_URL + movieId + '/' + REVIEWS;
             String TRAILERS_URL = BASE_URL + movieId + '/' + VIDEOS;
+            String LANGUAGE = getString(R.string.english);
+            String PAGE = "";
 
-            String reviewsJsonString = Utility.getJsonString(REVIEWS_URL, API_KEY);
-            String trailersJsonString = Utility.getJsonString(TRAILERS_URL, API_KEY);
+            String reviewsJsonString = Utility.getJsonString(REVIEWS_URL, API_KEY, LANGUAGE ,PAGE);
+            String trailersJsonString = Utility.getJsonString(TRAILERS_URL, API_KEY, LANGUAGE, PAGE);
 
             HashMap<String, String> reviews = Utility.getReviewsFromJson(reviewsJsonString);
             myMovie.setReviews(reviews);

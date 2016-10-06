@@ -1,9 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.example.basse.movieapp.MainActivityFragment">
+    tools:context="com.example.basse.movieapp.SearchActivityFragment"
+    tools:showIn="@layout/activity_search">
 
     <GridView
         android:layout_width="match_parent"
@@ -21,17 +24,18 @@
         <ImageView android:id="@+id/empty_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/img_not_found">
+            android:src="@drawable/no_search_results">
         </ImageView>
 
         <TextView android:id="@+id/empty_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="No Favorites"
+            android:text="No Results"
             android:textSize="@dimen/abc_text_size_large_material" />
 
     </LinearLayout>
     <!-- Here is the view to show if the list is empty -->
 
 </FrameLayout>
+

@@ -26,7 +26,8 @@ public class TabletPostersFragment extends Fragment {
 
     private GridView gridView;
     public ArrayList<Movie> movies = new ArrayList<>();
-    public ArrayList<ImageView> postersList = new ArrayList<ImageView>();
+    public ArrayList<ImageView> postersList = new ArrayList<>();
+    public ArrayList<String> posters_pathsList = new ArrayList<>();
     public ImageAdapter imageAdapter;
     public Communicator communicator;
     public static int currentPosition = 0;
@@ -55,8 +56,7 @@ public class TabletPostersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tablet_posters, container, false);
         gridView = (GridView) view.findViewById(R.id.gridview_movies);
-        postersList.add(new ImageView(getContext()));
-        imageAdapter = new ImageAdapter(getContext(), postersList,favoriteFragment);
+        imageAdapter = new ImageAdapter(getContext(), posters_pathsList,favoriteFragment);
         gridView.setAdapter(imageAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,8 +138,9 @@ public class TabletPostersFragment extends Fragment {
 
             String SORT_TYPE = params[0];
             String MOVIES_URL = BASE_URL + SORT_TYPE;
+            String LANGUAGE = getString(R.string.english);
 
-            moviesJsonString = Utility.getJsonString(MOVIES_URL, API_KEY);
+            moviesJsonString = Utility.getJsonString(MOVIES_URL, API_KEY,LANGUAGE,"");
             Log.v("Movie", "Movies JSON" + moviesJsonString);
 
             movies = Utility.getMoviesFromJson(moviesJsonString);

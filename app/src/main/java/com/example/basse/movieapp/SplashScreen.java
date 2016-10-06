@@ -53,7 +53,7 @@ public class SplashScreen extends AppCompatActivity {
             Thread t = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    //  Initialize SharedPreferences
+                    //  Initialize MySharedPreferences
                     SharedPreferences getPrefs = PreferenceManager
                             .getDefaultSharedPreferences(getBaseContext());
 

@@ -36,20 +36,17 @@ public class Utility {
     private static MovieDbHelper helper = MainActivity.helper;
 
 
-    public static ImageView getPoster(Context context, Movie movie) {
+    public static ImageView getPoster(Context context, String posterPath) {
         ImageView poster = new ImageView(context);
 
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int height = displayMetrics.heightPixels /2;
+        int height = displayMetrics.heightPixels / 2;
 
-        int width = displayMetrics.widthPixels /2;
-        String posterPath = movie.getPoster_path();
-        if (posterPath.equals(""))
-        {
+        int width = displayMetrics.widthPixels / 2;
+        if (posterPath.equals("")) {
             poster.setImageResource(R.drawable.no_poster_available);
-        }
-        else {
-            Picasso.with(context).load(posterPath).centerCrop().resize(width,height).into(poster);
+        } else {
+            Picasso.with(context).load(posterPath).centerCrop().resize(width, height).into(poster);
         }
         return poster;
     }
@@ -60,18 +57,36 @@ public class Utility {
         return poster;
     }
 
-    public static String getJsonString(String my_url, String API_KEY) {
+    public static String getJsonString(String my_url, String API_KEY, String LANGUAGE, String EXTRAS) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
-        final String LANGUAGE_EN = "en-US";
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
         String jsonString = null;
-
-
+        Uri moviesBuiltUri;
         try {
-            Uri moviesBuiltUri = Uri.parse(my_url).buildUpon().appendQueryParameter("api_key", API_KEY).appendQueryParameter("language", LANGUAGE_EN ).build();
+            if (my_url.contains("search")){
+                moviesBuiltUri = Uri.parse(my_url).buildUpon()
+                        .appendQueryParameter("api_key", API_KEY)
+                        .appendQueryParameter("language", LANGUAGE)
+                        .appendQueryParameter("query", EXTRAS)
+                        .build();
+
+            }
+            else if (!EXTRAS.isEmpty()) {
+                moviesBuiltUri = Uri.parse(my_url).buildUpon()
+                        .appendQueryParameter("api_key", API_KEY)
+                        .appendQueryParameter("language", LANGUAGE)
+                        .appendQueryParameter("page", EXTRAS)
+                        .build();
+            }
+            else{
+                moviesBuiltUri = Uri.parse(my_url).buildUpon()
+                        .appendQueryParameter("api_key", API_KEY)
+                        .appendQueryParameter("language", LANGUAGE)
+                        .build();
+            }
 
             URL url = null;
             try {
@@ -83,6 +98,7 @@ public class Utility {
 
             assert url != null;
             urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(7000);
             Log.v("URL", "URL Connection" + moviesBuiltUri.toString());
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -111,7 +127,7 @@ public class Utility {
             jsonString = buffer.toString();
 
         } catch (IOException e) {
-            Log.e("GetMoviesTask", "Error ", e);
+            Log.e("GetResultsTask", "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
             jsonString = null;
@@ -135,8 +151,8 @@ public class Utility {
         ArrayList<Movie> movies = new ArrayList<>();
         String RESULTS = "results";
         String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
-        String IMAGE_SIZE = "w500/";
-        String IMAGE_SIZE_BIG = "w500/";
+        String IMAGE_SIZE = "w342/";
+        String IMAGE_SIZE_BIG = "w342/";
         try {
             JSONObject moviesJson = null;
             moviesJson = new JSONObject(moviesJsonString);
