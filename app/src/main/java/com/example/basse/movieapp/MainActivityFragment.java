@@ -14,6 +14,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,6 +90,14 @@ public class MainActivityFragment extends Fragment {
                 intent.putExtra("Position", position);
                 intent.putExtra("Movie", movies.get(position));
                 startActivity(intent);
+            }
+        });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Toast.makeText(getContext(),movies.get(position).getTitle() ,Toast.LENGTH_SHORT).show();
+                return true;
             }
         });
 

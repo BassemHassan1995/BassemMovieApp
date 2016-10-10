@@ -56,6 +56,30 @@
                 android:src="@drawable/playbutton" />
         </FrameLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/title_genre_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:text="@string/genre"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/genre_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Genre - Genre - Genre" />
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -101,10 +125,11 @@
                 android:id="@+id/rating_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_gravity="center_horizontal"
                 android:focusable="false"
-                android:isIndicator="true"
-                android:numStars="5"
+                android:clickable="true"
+                android:numStars="10"
                 android:rating="0.0" />
         </LinearLayout>
 
@@ -145,6 +170,13 @@
                 android:text="@string/Reviews"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/reviews_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/no_reviews" />
 
             <ExpandableListView
                 android:id="@+id/expandableListView"

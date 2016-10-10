@@ -1,9 +1,7 @@
 package com.example.basse.movieapp;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -42,7 +41,7 @@ public class DetailsActivityFragment extends Fragment {
     private ImageView backdropPoster;
     private ImageView playTrailer;
     private RatingBar ratingBar;
-    private TextView review_TextView;
+    private TextView genre_TextView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +63,7 @@ public class DetailsActivityFragment extends Fragment {
         playTrailer = (ImageView) view.findViewById(R.id.play_button);
         ratingBar = (RatingBar) view.findViewById(R.id.rating_bar);
         expListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
-        review_TextView = (TextView) view.findViewById(R.id.title_reviews_text_view);
+        genre_TextView = (TextView) view.findViewById(R.id.genre_text_view);
 
         if (intent != null && intent.hasExtra("Position")) {
             movie = (Movie) intent.getSerializableExtra("Movie");
@@ -74,13 +73,15 @@ public class DetailsActivityFragment extends Fragment {
 
             String title = movie.getTitle();
             String releaseDate = movie.getRelease_date();
+            String genre = movie.getGenres();
             String overview = movie.getOverview();
             String backdrop = movie.getBackdrop_path();
             isFavourite = movie.isFavourite();
-            final float rating = Float.parseFloat(movie.getVote_average()) / 2;
+            final float rating = Float.parseFloat(movie.getVote_average()) ;
 
             title_textView.setText(title);
             releaseDate_textView.setText(releaseDate);
+            genre_TextView.setText(genre);
             overview_textView.setText(overview);
             if (!backdrop.contains("null")) {
                 Picasso.with(getContext()).load(backdrop).into(backdropPoster);
@@ -103,20 +104,15 @@ public class DetailsActivityFragment extends Fragment {
             });
 
             ratingBar.setRating(rating);
-            ratingBar.setOnClickListener(new View.OnClickListener() {
+            ratingBar.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(), "Rating = " + rating, Toast.LENGTH_LONG);
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(getContext(), "Rating: " + rating, Toast.LENGTH_SHORT).show();
+                    return true;
                 }
             });
 
-            if (trailerAndReviewsTask.getStatus() == AsyncTask.Status.FINISHED) {
-                int reviewsSize = mapDataChild.size();
-                if (reviewsSize == 0) {
-                    review_TextView.setVisibility(View.GONE);
-                }
-            }
-
+            expListView.setEmptyView(view.findViewById(R.id.reviews_text_view));
             expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
                 int previousItem = -1;
@@ -133,71 +129,12 @@ public class DetailsActivityFragment extends Fragment {
         return view;
     }
 
-    public void changeData(final Movie movie) {
-
-        final TrailerAndReviewsTask trailerAndReviewsTask = new TrailerAndReviewsTask();
-        trailerAndReviewsTask.execute(movie);
-
-        String title = movie.getTitle();
-        String releaseDate = movie.getRelease_date();
-        String overview = movie.getOverview();
-        String backdrop = movie.getBackdrop_path();
-        isFavourite = movie.isFavourite();
-        final float rating = Float.parseFloat(movie.getVote_average()) / 2;
-
-        title_textView.setText(title);
-        releaseDate_textView.setText(releaseDate);
-        overview_textView.setText(overview);
-        if (!backdrop.isEmpty())
-            Picasso.with(getContext()).load(backdrop).into(backdropPoster);
-        playTrailer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String trailerPath = movie.getTrailerPath();
-                if (!trailerPath.isEmpty())
-                {
-                    Uri uri = Uri.parse(trailerPath);
-                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                }
-                else {
-                    Toast.makeText(getContext(), R.string.no_trailers,Toast.LENGTH_SHORT);
-                }
-            }
-        });
-        ratingBar.setRating(rating);
-        ratingBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Rating = " + rating, Toast.LENGTH_LONG);
-            }
-        });
-
-        if (trailerAndReviewsTask.getStatus() == AsyncTask.Status.FINISHED) {
-            int reviewsSize = mapDataChild.size();
-            if (reviewsSize == 0) {
-                review_TextView.setVisibility(View.GONE);
-            }
-        }
-
-        expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
-            int previousItem = -1;
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                if (groupPosition != previousItem)
-                    expListView.collapseGroup(previousItem);
-                previousItem = groupPosition;
-            }
-        });
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_details, menu);
         MenuItem menuItem = menu.findItem(R.id.action_favourite);
-        Dao<Movie, Integer> movieDao = null;
+        Dao<Movie, Integer> movieDao;
         try {
             movieDao = MainActivity.helper.getMovieDao();
             Movie myMovie = movieDao.queryForSameId(movie);
@@ -315,12 +252,6 @@ public class DetailsActivityFragment extends Fragment {
         }
 
         return false;
-    }
-
-    public static boolean isTablet(Context context) {
-        return (context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
 }

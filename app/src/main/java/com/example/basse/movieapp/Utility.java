@@ -1,16 +1,10 @@
 package com.example.basse.movieapp;
 
-import android.content.Context;
 import android.net.Uri;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.ImageView;
-
-import com.j256.ormlite.dao.Dao;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,41 +17,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by basse on 16-Sep-16.
  */
-public class Utility {
+class Utility {
 
-    private static MovieDbHelper helper = MainActivity.helper;
-
-
-    public static ImageView getPoster(Context context, String posterPath) {
-        ImageView poster = new ImageView(context);
-
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int height = displayMetrics.heightPixels / 2;
-
-        int width = displayMetrics.widthPixels / 2;
-        if (posterPath.equals("")) {
-            poster.setImageResource(R.drawable.no_poster_available);
-        } else {
-            Picasso.with(context).load(posterPath).centerCrop().resize(width, height).into(poster);
-        }
-        return poster;
-    }
-
-    public static ImageView getTabletPoster(Context context, Movie movie) {
-        ImageView poster = new ImageView(context);
-        Picasso.with(context).load(movie.getPoster_path()).into(poster);
-        return poster;
-    }
-
-    public static String getJsonString(String my_url, String API_KEY, String LANGUAGE, String EXTRAS) {
+    static String getJsonString(String my_url, String API_KEY, String LANGUAGE, String EXTRAS) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -151,8 +119,8 @@ public class Utility {
         ArrayList<Movie> movies = new ArrayList<>();
         String RESULTS = "results";
         String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/";
-        String IMAGE_SIZE = "w342/";
-        String IMAGE_SIZE_BIG = "w342/";
+        String IMAGE_SIZE = "w500/";
+        String IMAGE_SIZE_BIG = "w500/";
         try {
             JSONObject moviesJson = null;
             moviesJson = new JSONObject(moviesJsonString);
@@ -168,10 +136,18 @@ public class Utility {
                 String overview = index.getString("overview");
                 String backdrop_path = index.getString("backdrop_path");
 
+                JSONArray genres_json = index.getJSONArray("genre_ids");
+                int len = genres_json.length();
+                int[] genres_ids = new int[len];
+                for (int j = 0; j < len; j++) {
+                    genres_ids [j] = genres_json.getInt(j);
+                }
+                String genres = Utility.getMovieGenres(genres_ids);
+
                 String IMAGE_URL = IMAGE_BASE_URL + IMAGE_SIZE + poster_path;
                 String BACKDROP_URL = IMAGE_BASE_URL + IMAGE_SIZE_BIG + backdrop_path;
 
-                movies.add(new Movie(id, IMAGE_URL, BACKDROP_URL, overview, release_date, title, vote));
+                movies.add(new Movie(id, IMAGE_URL, BACKDROP_URL, overview, release_date, title, vote,genres));
             }
             return movies;
         } catch (JSONException e) {
@@ -257,18 +233,76 @@ public class Utility {
         listView.requestLayout();
 
     }
+    public static String getMovieGenres(int[] genreIds) {
+        ArrayList<String> genres = new ArrayList<>();
+        for (int genreId : genreIds) {
+            String genre = "";
+            switch (genreId) {
+                case 28:
+                    genre = "Action";
+                    break;
+                case 12:
+                    genre = "Adventure";
+                    break;
+                case 16:
+                    genre = "Animation";
+                    break;
+                case 35:
+                    genre = "Comedy";
+                    break;
+                case 80:
+                    genre = "Crime";
+                    break;
+                case 99:
+                    genre = "Documentary";
+                    break;
+                case 18:
+                    genre = "Drama";
+                    break;
+                case 10751:
+                    genre = "Family";
+                    break;
+                case 14:
+                    genre = "Fantasy";
+                    break;
+                case 36:
+                    genre = "History";
+                    break;
+                case 27:
+                    genre = "Horror";
+                    break;
+                case 10402:
+                    genre = "Music";
+                    break;
+                case 9648:
+                    genre = "Mystery";
+                    break;
+                case 10749:
+                    genre = "Romance";
+                    break;
+                case 878:
+                    genre = "Science Fiction";
+                    break;
+                case 10770:
+                    genre = "TV Movie";
+                    break;
+                case 53:
+                    genre = "Thriller";
+                    break;
+                case 10752:
+                    genre = "War";
+                    break;
+                case 37:
+                    genre = "Western";
+                    break;
 
-
-    public static List<Movie> getDbMovies() {
-        try {
-            Dao<Movie, Integer> movieDao = helper.getMovieDao();
-            return movieDao.queryForAll();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+                default:
+                    break;
+            }
+            genres.add(genre);
         }
-
-        return null;
+        String genres_string = genres.toString();
+        return genres_string.substring(1,genres_string.length()-1);
     }
 
 }
